@@ -11,6 +11,7 @@ There needs to be a file containing all the pubs questioned.
 This is named pubs.txt
 
 This file is loaded for all TBP problems and is laid out like so:
+
     me pub1 distance
     me pub2 distance
     pub1 pub2 distance
