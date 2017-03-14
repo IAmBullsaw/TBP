@@ -12,9 +12,11 @@ This is named pubs.txt
 
 This file is loaded for all TBP problems and is laid out like so:
 
-    me pub1 distance
-    me pub2 distance
-    pub1 pub2 distance
+    me,pub1,distance
+    me,pub2,distance
+    pub1,pub2,distance
+
+where *me* is the distance between your position and *pub1*, *pub1* and *pub2* are pub names and *distance* is the distance between them, preferably an integer.
 
 ## The output
 It's really the first, shortest match that is printed.
