@@ -12,14 +12,28 @@ def load_distances_from_file(path):
     dic = {}
     with open(path) as f:
         for line in f:
-            a, b, d = line.split()
+            a, b, d = line.split(',')
             dic[(a,b)] = int(d)
     return dic
+
+def validate_data(pubs,paths):
+    for pub in pubs:
+        valid = False
+        for k in paths.keys():
+            if pub == k[0] or pub == k[1]:
+                valid = True
+                break
+        if not valid:
+            return False, pub
+    return True, None
+        
 
 def tbp(pubs,paths):
     best_dist = 9999999999 #yes really
     best_perm = None
     for perm in permutations(pubs):
+        perm = list(perm)
+        perm.insert(0,'me')
         s = 0 
         for i in range(len(perm)-1):
             a = perm[i]
@@ -45,7 +59,12 @@ if __name__ == '__main__':
 
     if len(pubs) == 5:
         paths = load_distances_from_file(path_to_file)
-        perm,dist = tbp(pubs,paths)
-        present(perm,dist)
+
+        valid, who = validate_data(pubs,paths)
+        if valid:
+            perm,dist = tbp(pubs,paths)
+            present(perm,dist)
+        else:
+            print('Could not find pub "{}" in file.'.format(who))
     else:
         print('That is not five pubs.')
