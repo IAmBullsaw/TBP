@@ -40,7 +40,12 @@ def tbp(pubs,paths):
             b = perm[i+1]
             val = paths.get((a,b))
             if val == None:
-                val = paths[(b,a)]
+                val = paths.get((b,a))
+            if val == None:
+                if a == b:
+                    raise Exception('You are trying to visit the pub "{}" twice. I can not compute.'.format(a))
+                else:   
+                    raise Exception('Pub "{}" did not exist'.format((a,b)))
             s += val
         if s < best_dist:
             best_dist = s
@@ -54,17 +59,20 @@ def present(perm,dist):
     print('For a total distance of {} units'.format(dist))
     
 if __name__ == '__main__':
-    inp = input('give me 5 pubs seperated with spaces: ')
+    inp = input('Enter some unique pubs seperated with spaces: ')
     pubs = inp.split()
 
-    if len(pubs) == 5:
+    if len(pubs) > 1:
         paths = load_distances_from_file(path_to_file)
 
         valid, who = validate_data(pubs,paths)
         if valid:
-            perm,dist = tbp(pubs,paths)
-            present(perm,dist)
+            try:
+                perm,dist = tbp(pubs,paths)
+                present(perm,dist)
+            except Exception as e:
+                print(e)
         else:
             print('Could not find pub "{}" in file.'.format(who))
     else:
-        print('That is not five pubs.')
+        print('That is not correct input. Please input at least two pubs.')
