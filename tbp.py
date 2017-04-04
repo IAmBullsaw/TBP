@@ -59,20 +59,27 @@ def present(perm,dist):
     print('For a total distance of {} units'.format(dist))
     
 if __name__ == '__main__':
-    inp = input('Enter some unique pubs seperated with spaces: ')
-    pubs = inp.split()
 
-    if len(pubs) > 1:
-        paths = load_distances_from_file(path_to_file)
-
-        valid, who = validate_data(pubs,paths)
-        if valid:
-            try:
-                perm,dist = tbp(pubs,paths)
-                present(perm,dist)
-            except Exception as e:
-                print(e)
-        else:
-            print('Could not find pub "{}" in file.'.format(who))
-    else:
-        print('That is not correct input. Please input at least two pubs.')
+    done = False
+    while not done:
+        inp = input('Enter some unique pubs seperated with spaces (q to quit): ')
+        if inp == 'q':
+            done = True
+        else:    
+            pubs = inp.split()
+        
+            if len(pubs) > 1:
+                paths = load_distances_from_file(path_to_file)
+            
+                valid, who = validate_data(pubs,paths)
+                if valid:
+                    try:
+                        perm,dist = tbp(pubs,paths)
+                        present(perm,dist)
+                    except Exception as e:
+                        print(e)
+                else:
+                    print('Could not find pub "{}" in file.'.format(who))
+            else:
+                print('That is not correct input. Please input at least two pubs.')
+    print("Thank you. Have fun!")
