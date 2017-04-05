@@ -11,9 +11,22 @@ path_to_file = 'pubs.txt'
 def load_distances_from_file(path):
     dic = {}
     with open(path) as f:
-        for line in f:
-            a, b, d = line.split(',')
-            dic[(a,b)] = int(d)
+        for i,line in enumerate(f):
+            # Ignore comments or empty lines.
+            if '#' == line[0] or line == "" or line == "\n":
+                continue
+            # We need to be able to unpack at MOST 3 values
+            count = 0
+            for c in line:
+                if c == ',':
+                    count += 1
+            if count == 2:
+                a, b, d = line.split(',')
+                dic[(a,b)] = int(d)
+            else:
+                print("Error: pubs.txt is not well formed.\nLine number: {}\nLine: {}".format(i, line))
+                dic = {}
+                break;
     return dic
 
 def validate_data(pubs,paths):
@@ -61,25 +74,25 @@ def present(perm,dist):
 if __name__ == '__main__':
 
     done = False
-    while not done:
-        inp = input('Enter some unique pubs seperated with spaces (q to quit): ')
-        if inp == 'q':
-            done = True
-        else:    
-            pubs = inp.split()
-        
-            if len(pubs) > 1:
-                paths = load_distances_from_file(path_to_file)
-            
-                valid, who = validate_data(pubs,paths)
-                if valid:
-                    try:
-                        perm,dist = tbp(pubs,paths)
-                        present(perm,dist)
-                    except Exception as e:
-                        print(e)
+    paths = load_distances_from_file(path_to_file)
+    if paths != {}:
+        while not done:
+            inp = input('Enter some unique pubs seperated with spaces (q to quit): ')
+            if inp == 'q':
+                done = True
+            else:    
+                pubs = inp.split()
+                
+                if len(pubs) > 1:
+                    valid, who = validate_data(pubs,paths)
+                    if valid:
+                        try:
+                            perm,dist = tbp(pubs,paths)
+                            present(perm,dist)
+                        except Exception as e:
+                            print(e)
+                    else:
+                        print('Could not find pub "{}" in file.'.format(who))
                 else:
-                    print('Could not find pub "{}" in file.'.format(who))
-            else:
-                print('That is not correct input. Please input at least two pubs.')
-    print("Thank you. Have fun!")
+                    print('That is not correct input. Please input at least two pubs.')
+        print("Thank you. Have fun!")

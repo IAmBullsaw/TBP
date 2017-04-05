@@ -1,3 +1,5 @@
+# This is a working example file.
+# This is how you make comments.
 me,a,1
 me,b,4
 me,c,3
@@ -10,6 +12,8 @@ me,i,1
 me,j,5
 me,l,2
 me,k,3
+#it should be OK to make enters to divide pubs easily
+
 a,b,7
 a,c,3
 a,d,4
