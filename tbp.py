@@ -58,7 +58,7 @@ def tbp(pubs,paths):
                 if a == b:
                     raise Exception('You are trying to visit the pub "{}" twice. I can not compute.'.format(a))
                 else:   
-                    raise Exception('Pub "{}" did not exist'.format((a,b)))
+                    raise Exception('Pub entry "{}" did not exist'.format((a,b)))
             s += val
         if s < best_dist:
             best_dist = s
@@ -77,12 +77,20 @@ if __name__ == '__main__':
     paths = load_distances_from_file(path_to_file)
     if paths != {}:
         while not done:
-            inp = input('Enter some unique pubs seperated with spaces (q to quit): ')
+            inp = input('Enter some unique pubs seperated with commas (q,ls): ')
             if inp == 'q':
                 done = True
+            elif inp == 'ls':
+                s = set()
+                for k,v in paths:
+                    s.add(k)
+                    s.add(v)
+                print("Available pubs:")
+                s.remove('me')
+                for p in s:
+                    print('\t'+p)
             else:    
-                pubs = inp.split()
-                
+                pubs = inp.split(',')
                 if len(pubs) > 1:
                     valid, who = validate_data(pubs,paths)
                     if valid:
